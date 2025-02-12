@@ -1,0 +1,52 @@
+import Modal from 'react-modal';
+
+const TimeModal = ({ isOpen, handleCloseModal, selectedActivity, audio }) => {
+  return (
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={handleCloseModal}
+      contentLabel="Alerta de Tiempo"
+      className="fixed inset-0 flex items-center justify-center z-50"
+      overlayClassName="fixed inset-0 bg-opacity-50 backdrop-blur-md"
+    >
+      <div className="bg-white rounded-lg shadow-lg p-6 dark:bg-gray-800">
+        <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">
+          {selectedActivity ? selectedActivity.name : '¡Alerta de Tiempo!'}
+        </h2>
+        <p className="text-gray-900 dark:text-white">
+          {selectedActivity
+            ? `Tiempo: ${new Date(selectedActivity.time * 1000).toISOString().substr(11, 8)}`
+            : '¡La actividad ha superado los 60 minutos!'}
+        </p>
+        {selectedActivity && (
+          <>
+            <p className="text-gray-900 dark:text-white">
+              Tiempo de Pausa: {new Date(selectedActivity.totalPauseTime * 1000).toISOString().substr(11, 8)}
+            </p>
+            <p className="text-gray-900 dark:text-white">
+              Tiempo Total: {new Date((selectedActivity.totalTime) * 1000).toISOString().substr(11, 8)}
+            </p>
+            <div className="mt-4">
+              <h3 className="text-lg font-bold mb-2 text-gray-900 dark:text-white">Comentarios:</h3>
+              <ul className="list-disc list-inside text-gray-900 dark:text-white">
+                {selectedActivity.comments.map((comment, index) => (
+                  <li key={index}>
+                    {comment.timestamp}: {comment.text}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </>
+        )}
+        <button
+          className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-700"
+          onClick={handleCloseModal}
+        >
+          Cerrar
+        </button>
+      </div>
+    </Modal>
+  );
+};
+
+export default TimeModal;
