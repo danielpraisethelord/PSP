@@ -19,8 +19,13 @@ ChartJS.register(
 );
 
 const ActivityGraph = ({ activities }) => {
+  const totalTimeSum = activities.reduce((acc, activity) => acc + activity.totalTime, 0);
+
   const data = {
-    labels: activities.map((activity) => activity.name),
+    labels: activities.map((activity) => {
+      const percentage = ((activity.totalTime / totalTimeSum) * 100).toFixed(2);
+      return `${activity.name} - ${percentage}%`;
+    }),
     datasets: [
       {
         label: 'Tiempo en segundos',
