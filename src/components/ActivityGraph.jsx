@@ -28,8 +28,8 @@ const ActivityGraph = ({ activities }) => {
     }),
     datasets: [
       {
-        label: 'Tiempo en segundos',
-        data: activities.map((activity) => activity.time),
+        label: 'Tiempo en minutos',
+        data: activities.map((activity) => (activity.time / 60).toFixed(2)),
         backgroundColor: (context) => {
           const chart = context.chart;
           const { ctx, chartArea } = chart;

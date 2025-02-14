@@ -15,16 +15,16 @@ const TimeModal = ({ isOpen, handleCloseModal, selectedActivity, audio }) => {
         </h2>
         <p className="text-gray-900 dark:text-white">
           {selectedActivity
-            ? `Tiempo: ${new Date(selectedActivity.time * 1000).toISOString().substr(11, 8)}`
+            ? `Tiempo: ${(selectedActivity.time / 60).toFixed(2)} minutos`
             : '¡La actividad ha superado los 60 minutos!'}
         </p>
         {selectedActivity && (
           <>
             <p className="text-gray-900 dark:text-white">
-              Tiempo de Pausa: {new Date(selectedActivity.totalPauseTime * 1000).toISOString().substr(11, 8)}
+              Tiempo de Pausa: ${(selectedActivity.totalPauseTime / 60).toFixed(2)} minutos
             </p>
             <p className="text-gray-900 dark:text-white">
-              Tiempo Total: {new Date((selectedActivity.totalTime) * 1000).toISOString().substr(11, 8)}
+              Tiempo Total: ${(selectedActivity.totalTime / 60).toFixed(2)} minutos
             </p>
             <div className="mt-4">
               <h3 className="text-lg font-bold mb-2 text-gray-900 dark:text-white">Comentarios:</h3>
