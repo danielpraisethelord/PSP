@@ -62,13 +62,3 @@ Sigue estos pasos para instalar y ejecutar el proyecto en tu máquina local:
 3. Realiza los cambios necesarios y haz commit (`git commit -m 'Añadida nueva funcionalidad'`).
 4. Sube los cambios (`git push origin feature/nueva-funcionalidad`).
 5. Abre un Pull Request.
-
-## Licencia
-
-Este proyecto está licenciado bajo la Licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más detalles.
-
-## Contacto
-
-Daniel Praise The Lord - [danielpraisethelord@example.com](mailto:danielpraisethelord@example.com)
-
-Proyecto Link: [https://github.com/tu-usuario/reloj-contador](https://github.com/tu-usuario/reloj-contador)
