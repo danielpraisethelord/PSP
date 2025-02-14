@@ -36,6 +36,22 @@ const TimeModal = ({ isOpen, handleCloseModal, selectedActivity, audio }) => {
                 ))}
               </ul>
             </div>
+            <div className="mt-4">
+              <h3 className="text-lg font-bold mb-2 text-gray-900 dark:text-white">Horas de Inicio:</h3>
+              <ul className="list-disc list-inside text-gray-900 dark:text-white">
+                {selectedActivity.startTimes.map((startTime, index) => (
+                  <li key={index}>{startTime}</li>
+                ))}
+              </ul>
+            </div>
+            <div className="mt-4">
+              <h3 className="text-lg font-bold mb-2 text-gray-900 dark:text-white">Horas de Fin:</h3>
+              <ul className="list-disc list-inside text-gray-900 dark:text-white">
+                {selectedActivity.endTimes.map((endTime, index) => (
+                  <li key={index}>{endTime}</li>
+                ))}
+              </ul>
+            </div>
           </>
         )}
         <button

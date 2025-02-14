@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Timer from './components/Timer';
 import ActivityGraph from './components/ActivityGraph';
 import TimeModal from './components/TimeModal';
@@ -7,6 +7,7 @@ import ActivitiesModal from './components/ActivitiesModal';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Modal from 'react-modal';
+import { exportToPdf } from './utils/exportToPdf';
 import './index.css';
 
 Modal.setAppElement('#root');
@@ -26,6 +27,19 @@ function App() {
   const [totalPauseTime, setTotalPauseTime] = useState(0);
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [projectTitle, setProjectTitle] = useState('');
+  const [isProjectTitleModalOpen, setIsProjectTitleModalOpen] = useState(false);
+  const graphRef = useRef();
+
+  useEffect(() => {
+    if (activities.length === 0) {
+      setIsProjectTitleModalOpen(true);
+    }
+  }, [activities]);
+
+  const handleProjectTitleSubmit = () => {
+    setIsProjectTitleModalOpen(false);
+  };
 
   useEffect(() => {
     const fetchLocalTime = async () => {
@@ -107,16 +121,20 @@ function App() {
     reader.readAsText(file);
   };
 
-  const exportToJson = () => {
+  const handleExportToJson = () => {
     const dataStr = JSON.stringify(activities, null, 2);
     const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
 
-    const exportFileDefaultName = 'actividades.json';
+    const exportFileDefaultName = `${projectTitle}.json`;
 
     const linkElement = document.createElement('a');
     linkElement.setAttribute('href', dataUri);
     linkElement.setAttribute('download', exportFileDefaultName);
     linkElement.click();
+  };
+
+  const handleExportToPdf = () => {
+    exportToPdf(projectTitle, activities, graphRef);
   };
 
   const validateJson = (json) => {
@@ -162,9 +180,15 @@ function App() {
               </button>
               <button
                 className="block px-4 py-2 w-full text-left hover:bg-gray-700"
-                onClick={exportToJson}
+                onClick={handleExportToJson}
               >
                 Exportar Actividades
+              </button>
+              <button
+                className="block px-4 py-2 w-full text-left hover:bg-gray-700"
+                onClick={handleExportToPdf}
+              >
+                Exportar a PDF
               </button>
               <div className="block px-4 py-2 w-full text-left hover:bg-gray-700">
                 <label className="cursor-pointer">
@@ -207,7 +231,7 @@ function App() {
         setIsModalOpen={setIsModalOpen}
         setAudio={setAudio}
       />
-      <div className="mt-8 w-full max-w-2xl bg-white rounded-lg shadow-sm dark:bg-gray-800 p-4 md:p-6">
+      <div className="mt-8 w-full max-w-2xl bg-white rounded-lg shadow-sm dark:bg-gray-800 p-4 md:p-6" ref={graphRef}>
         <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Gráfico de Actividades</h2>
         <ActivityGraph activities={activities} />
       </div>
@@ -237,6 +261,29 @@ function App() {
         newActivityName={newActivityName}
         setNewActivityName={setNewActivityName}
       />
+      <Modal
+        isOpen={isProjectTitleModalOpen}
+        onRequestClose={() => setIsProjectTitleModalOpen(false)}
+        contentLabel="Título del Proyecto"
+        className="fixed inset-0 flex items-center justify-center z-50"
+        overlayClassName="fixed inset-0 bg-opacity-50 backdrop-blur-md"
+      >
+        <div className="bg-white rounded-lg shadow-lg p-6 dark:bg-gray-800 max-w-md w-full">
+          <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Ingrese el Título del Proyecto</h2>
+          <input
+            type="text"
+            className="w-full p-2 mb-4 border border-gray-300 rounded dark:bg-gray-700 dark:text-white"
+            value={projectTitle}
+            onChange={(e) => setProjectTitle(e.target.value)}
+          />
+          <button
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+            onClick={handleProjectTitleSubmit}
+          >
+            Guardar
+          </button>
+        </div>
+      </Modal>
       <ToastContainer />
     </div>
   );

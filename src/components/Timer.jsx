@@ -23,6 +23,7 @@ const Timer = ({
 }) => {
   const [selectedActivityId, setSelectedActivityId] = useState('');
   const [comment, setComment] = useState('');
+  const [isActivityStarted, setIsActivityStarted] = useState(false); // Nueva bandera
 
   useEffect(() => {
     let timer;
@@ -45,6 +46,11 @@ const Timer = ({
     }
   }, [time, setIsModalOpen, setAudio]);
 
+  // Restablecer isActivityStarted cuando se selecciona una nueva actividad
+  useEffect(() => {
+    setIsActivityStarted(false);
+  }, [selectedActivityId]);
+
   const handleStart = () => {
     if (selectedActivityId) {
       const selectedActivity = activitiesList.find(activity => activity.id === parseInt(selectedActivityId, 10));
@@ -54,6 +60,7 @@ const Timer = ({
       }
 
       const timestamp = new Date().toLocaleString();
+      const currentTime = new Date().toLocaleTimeString(); 
 
       let updatedActivities;
       const existingActivity = activities.find(a => a.id === selectedActivity.id);
@@ -61,6 +68,10 @@ const Timer = ({
       if (existingActivity) {
         setTime(existingActivity.time);
         setTotalPauseTime(existingActivity.totalPauseTime);
+        if (!isActivityStarted) { // Solo agregar la hora de inicio si la actividad no ha sido iniciada
+          existingActivity.startTimes.push(currentTime);
+          setIsActivityStarted(true); // Marcar la actividad como iniciada
+        }
         if (comment) {
           const newComment = {
             text: comment,
@@ -86,9 +97,12 @@ const Timer = ({
             time: 0,
             totalPauseTime: 0,
             totalTime: 0,
+            startTimes: [currentTime],
+            endTimes: [],
             comments: [newComment],
           },
         ];
+        setIsActivityStarted(true); // Marcar la actividad como iniciada
       }
 
       setActivities(updatedActivities);
@@ -141,10 +155,11 @@ const Timer = ({
             ...a, 
             time, 
             totalPauseTime: totalPauseTime + pauseDuration, 
-            totalTime: time + totalPauseTime + pauseDuration // Ajustado
+            totalTime: time + totalPauseTime + pauseDuration, 
+            endTimes: [...a.endTimes, new Date().toLocaleTimeString()]
           }
         : a
-    );    
+    );
 
     setActivities(updatedActivities);
     setTime(0);
@@ -152,6 +167,7 @@ const Timer = ({
     setTotalPauseTime(0);
     setPauseStartTime(null);
     setSelectedActivityId('');
+    setIsActivityStarted(false); // Restablecer la bandera cuando se detiene la actividad
   };
 
   return (
