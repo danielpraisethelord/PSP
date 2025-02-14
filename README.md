@@ -1,7 +1,5 @@
 # Reloj Contador
 
-![Reloj Contador Logo](path_to_logo_image)
-
 ## Descripción
 
 **Reloj Contador** es una aplicación de gestión de tiempo que permite a los usuarios registrar y monitorizar actividades, generando informes detallados en formato PDF y JSON. Ideal para profesionales que necesitan rastrear el tiempo dedicado a diferentes proyectos y actividades.
