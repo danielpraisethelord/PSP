@@ -31,16 +31,12 @@ export const exportToPdf = async (projectTitle, activities, graphRef) => {
 
   // Datos de las actividades en formato de tabla
   const activitiesTableData = activities.map((activity) => {
-    console.log('Actividad:', activity);
     const startDate = parseDateTime(activity.startTimes[0]);
     const endDate = parseDateTime(activity.endTimes[activity.endTimes.length - 1]);
     const comments = activity.comments.map(comment => comment.text).join(', ');
     const interruption = activity.totalPauseTime;
     const time = activity.time;
     const timesStarted = activity.startTimes.length;
-
-    console.log('Fecha de inicio:', activity.startTimes[0], '->', startDate);
-    console.log('Fecha de fin:', activity.endTimes[activity.endTimes.length - 1], '->', endDate);
 
     return [
       activity.name,
@@ -86,13 +82,30 @@ export const exportToPdf = async (projectTitle, activities, graphRef) => {
         {
           label: 'Tiempo en segundos',
           data: Object.values(aggregatedActivities),
-          backgroundColor: 'rgba(75, 192, 192, 0.6)',
-          borderColor: 'rgba(75, 192, 192, 1)',
+          backgroundColor: (context) => {
+            const chart = context.chart;
+            const { ctx, chartArea } = chart;
+
+            if (!chartArea) {
+              return null;
+            }
+
+            const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
+            gradient.addColorStop(0, 'rgba(255, 99, 132, 0.2)');
+            gradient.addColorStop(1, 'rgba(255, 99, 132, 0.8)');
+
+            return gradient;
+          },
+          borderColor: 'rgba(255, 99, 132, 1)',
           borderWidth: 2,
-          borderRadius: 5,
-          hoverBackgroundColor: 'rgba(75, 192, 192, 0.6)',
-          hoverBorderColor: 'rgba(75, 192, 192, 1)',
+          borderRadius: 15,
+          hoverBackgroundColor: 'rgba(255, 99, 132, 0.6)',
+          hoverBorderColor: 'rgba(255, 99, 132, 1)',
           hoverBorderWidth: 3,
+          shadowOffsetX: 4,
+          shadowOffsetY: 4,
+          shadowBlur: 10,
+          shadowColor: 'rgba(0, 0, 0, 0.5)',
         },
       ],
     },

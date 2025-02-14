@@ -231,7 +231,7 @@ function App() {
         setIsModalOpen={setIsModalOpen}
         setAudio={setAudio}
       />
-      <div className="mt-8 w-full max-w-2xl bg-white rounded-lg shadow-sm dark:bg-gray-800 p-4 md:p-6" ref={graphRef}>
+      <div className="mt-8 w-full max-w-4xl bg-white rounded-lg shadow-sm dark:bg-gray-800 p-4 md:p-6" ref={graphRef}>
         <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Gráfico de Actividades</h2>
         <ActivityGraph activities={activities} />
       </div>
